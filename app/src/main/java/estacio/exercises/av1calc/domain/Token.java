@@ -1,6 +1,8 @@
 package estacio.exercises.av1calc.domain;
 
 
+import estacio.exercises.av1calc.App;
+import estacio.exercises.av1calc.R;
 import estacio.exercises.av1calc.domain.enums.TokenType;
 
 public class Token {
@@ -40,7 +42,7 @@ public class Token {
         } else if(value == ')') {
             tok = new Token(value, TokenType.END_BRACKET);
         } else {
-            throw new IllegalArgumentException("Token inválid: " + value);
+            throw new IllegalArgumentException(String.format(App.getAppContext().getString(R.string.exception_invalid_token), value));
         }
         return tok;
     }
@@ -55,5 +57,10 @@ public class Token {
 
     public int getPrecedence() {
         return precedence;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(getValue());
     }
 }
