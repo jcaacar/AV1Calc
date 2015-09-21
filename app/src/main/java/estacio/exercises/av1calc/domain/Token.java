@@ -38,12 +38,12 @@ public class Token {
             tok = new Token(value, TokenType.OP_DIV, 2);
         } else if(value.equals("^")) {
             tok = new Token(value, TokenType.OP_POW, 3);
+        } else if(value.hashCode() == 0x221A) { // Square root
+            tok = new Token(value, TokenType.OP_SQRT, 3);
         } else if(value.equals("(")) {
             tok = new Token(value, TokenType.OPEN_BRACKET);
         } else if(value.equals(")")) {
             tok = new Token(value, TokenType.END_BRACKET);
-        } else if(value.hashCode() == 0x221A) { // Square root
-            tok = new Token(value, TokenType.OP_SQRT, 3);
         } else {
             throw new IllegalArgumentException(String.format(App.getAppContext().getString(R.string.exception_invalid_token), value));
         }
