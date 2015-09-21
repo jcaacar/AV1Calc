@@ -1,5 +1,6 @@
 package estacio.exercises.av1calc.domain;
 
+import android.text.TextUtils;
 
 import estacio.exercises.av1calc.App;
 import estacio.exercises.av1calc.R;
@@ -7,47 +8,49 @@ import estacio.exercises.av1calc.domain.enums.TokenType;
 
 public class Token {
 
-    private char value;
+    private String value;
     private TokenType type;
     private int precedence;
 
     // For operators who do not use precedence
-    private Token(char value, TokenType type){
+    private Token(String value, TokenType type){
         this.value = value;
         this.type = type;
     }
 
-    private Token(char value, TokenType type, int precedence) {
+    private Token(String value, TokenType type, int precedence) {
         this(value, type);
         this.precedence = precedence;
     }
 
-    public static Token createToken(char value) throws IllegalArgumentException {
+    public static Token createToken(String value) throws IllegalArgumentException {
         Token tok;
 
-        if( value >= 48 && value <= 57) {
+        if(TextUtils.isDigitsOnly(value)) {
             tok = new Token(value, TokenType.NUMBER);
-        } else if(value == '+') {
+        } else if(value.equals("+")) {
             tok = new Token(value, TokenType.OP_SUM, 1);
-        } else if(value == '-') {
+        } else if(value.equals("-")) {
             tok = new Token(value, TokenType.OP_SUB, 1);
-        } else if(value == '*') {
+        } else if(value.equals("*")) {
             tok = new Token(value, TokenType.OP_MULT, 2);
-        } else if(value == '/') {
+        } else if(value.equals("/")) {
             tok = new Token(value, TokenType.OP_DIV, 2);
-        } else if(value == '^') {
+        } else if(value.equals("^")) {
             tok = new Token(value, TokenType.OP_POW, 3);
-        } else if(value == '(') {
+        } else if(value.equals("(")) {
             tok = new Token(value, TokenType.OPEN_BRACKET);
-        } else if(value == ')') {
+        } else if(value.equals(")")) {
             tok = new Token(value, TokenType.END_BRACKET);
+        } else if(value.hashCode() == 0x221A) { // Square root
+            tok = new Token(value, TokenType.OP_SQRT, 3);
         } else {
             throw new IllegalArgumentException(String.format(App.getAppContext().getString(R.string.exception_invalid_token), value));
         }
         return tok;
     }
 
-    public char getValue() {
+    public String getValue() {
         return value;
     }
 
@@ -61,6 +64,6 @@ public class Token {
 
     @Override
     public String toString() {
-        return String.valueOf(getValue());
+        return getValue();
     }
 }

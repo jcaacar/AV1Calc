@@ -43,7 +43,7 @@ public class CalculatorExpression {
         Collection<Token> tokens = new ArrayList<>(this.expression.length());
 
         for (int i = 0; i < this.expression.length(); i++) {
-            tokens.add(Token.createToken(this.expression.charAt(i)));
+            tokens.add(Token.createToken(Character.toString(this.expression.charAt(i))));
         }
         return tokens;
     }
@@ -67,6 +67,7 @@ public class CalculatorExpression {
                 case OP_MULT:
                 case OP_DIV:
                 case OP_POW:
+                case OP_SQRT:
                     // if the new operator has less/equals precedence, remove top of stack and push in output list
                     while(!stack.empty() && item.getPrecedence() <= stack.peek().getPrecedence()) {
                         tokens.add(stack.pop());
@@ -85,9 +86,8 @@ public class CalculatorExpression {
         }
 
         // puts operators left over in the output list
-        while(!stack.empty()) {
-            tokens.add(stack.pop());
-        }
+        tokens.addAll(stack);
+
         return tokens;
     }
 
@@ -96,11 +96,17 @@ public class CalculatorExpression {
 
         for (Token item : this.expressionTokensRPN) {
             if (item.getType() == TokenType.NUMBER) {
-                stack.push((double) Character.getNumericValue(item.getValue()));
+                stack.push((double) Integer.parseInt(item.getValue()));
             } else { // Operators
-                double result = 0;
-                double value2 = stack.pop();
-                double value1 = stack.pop();
+                double result = 0, value1, value2 = 0;
+
+                // square root is using only one operator for now
+                if(item.getType() == TokenType.OP_SQRT) {
+                    value1 = stack.pop();
+                } else {
+                    value2 = stack.pop();
+                    value1 = stack.pop();
+                }
 
                 switch (item.getType()) {
                     case OP_SUM:
@@ -120,6 +126,9 @@ public class CalculatorExpression {
                         break;
                     case OP_POW:
                         result = (int) Math.pow(value1, value2);
+                        break;
+                    case OP_SQRT:
+                        result = (int) Math.sqrt(value1);
                         break;
                 }
                 stack.push(result);

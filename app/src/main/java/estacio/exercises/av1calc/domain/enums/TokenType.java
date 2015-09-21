@@ -7,6 +7,7 @@ public enum TokenType {
     OP_MULT,
     OP_DIV,
     OP_POW,
+    OP_SQRT,
     OPEN_BRACKET,
     END_BRACKET
 }
