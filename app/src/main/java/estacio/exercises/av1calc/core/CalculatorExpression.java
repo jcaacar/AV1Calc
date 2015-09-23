@@ -1,14 +1,14 @@
 package estacio.exercises.av1calc.core;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.Stack;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Collection;
 
 import estacio.exercises.av1calc.App;
 import estacio.exercises.av1calc.R;
 import estacio.exercises.av1calc.domain.Token;
+import estacio.exercises.av1calc.domain.TokenUtil;
 import estacio.exercises.av1calc.domain.enums.TokenType;
 
 public class CalculatorExpression {
@@ -24,7 +24,7 @@ public class CalculatorExpression {
     }
 
     public double execute() throws IllegalArgumentException {
-        this.expressionTokens = extractTokens();
+        this.expressionTokens = TokenUtil.extractTokens(this.expression);
         this.expressionTokensRPN = shuntingYard();
 
         return calculateRPN();
@@ -37,15 +37,6 @@ public class CalculatorExpression {
             this.expressionRPN = Arrays.toString(expressionTokensRPN.toArray());
         }
         return this.expressionRPN;
-    }
-
-    private Collection<Token> extractTokens() {
-        Collection<Token> tokens = new ArrayList<>(this.expression.length());
-
-        for (int i = 0; i < this.expression.length(); i++) {
-            tokens.add(Token.createToken(Character.toString(this.expression.charAt(i))));
-        }
-        return tokens;
     }
 
     private void validateExpression(String expression) {
@@ -86,26 +77,28 @@ public class CalculatorExpression {
         }
 
         // puts operators left over in the output list
-        tokens.addAll(stack);
+        while(!stack.empty()) {
+            tokens.add(stack.pop());
+        }
 
         return tokens;
     }
 
     private double calculateRPN() {
-        Stack<Double> stack = new Stack<>();
+        Stack<Double> operands = new Stack<>();
 
         for (Token item : this.expressionTokensRPN) {
             if (item.getType() == TokenType.NUMBER) {
-                stack.push((double) Integer.parseInt(item.getValue()));
-            } else { // Operators
+                operands.push(item.getValue());
+            } else {
                 double result = 0, value1, value2 = 0;
 
-                // square root is using only one operator for now
+                // square root only use one operand
                 if(item.getType() == TokenType.OP_SQRT) {
-                    value1 = stack.pop();
+                    value1 = operands.pop();
                 } else {
-                    value2 = stack.pop();
-                    value1 = stack.pop();
+                    value2 = operands.pop();
+                    value1 = operands.pop();
                 }
 
                 switch (item.getType()) {
@@ -131,9 +124,9 @@ public class CalculatorExpression {
                         result = (int) Math.sqrt(value1);
                         break;
                 }
-                stack.push(result);
+                operands.push(result);
             }
         }
-        return stack.pop();
+        return operands.pop();
     }
 }

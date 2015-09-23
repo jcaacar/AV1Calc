@@ -3,4 +3,8 @@
     <string name="exception_expr_not_found">Expression not found.</string>
     <string name="exception_divisor_by_zero">Argument \'divisor\' is 0.</string>
     <string name="exception_invalid_token">Token inválid: \'%s\'."</string>
+
+    <string name="square_root">√</string>
+    <string name="backspace">\u21D0</string>
+
 </resources>

@@ -55,7 +55,7 @@
 
             <Button
                 style="@style/StyleButton"
-                android:text="\u221a"
+                android:text="@string/square_root"
                 android:onClick="btnOnClick" />
 
             <Button
@@ -65,7 +65,7 @@
 
             <Button
                 style="@style/StyleButton"
-                android:text="\u21D0"
+                android:text="@string/backspace"
                 android:onClick="btnBackspaceOnClick" />
 
         </TableRow>

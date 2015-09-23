@@ -1,56 +1,33 @@
 package estacio.exercises.av1calc.domain;
 
-import android.text.TextUtils;
-
 import estacio.exercises.av1calc.App;
 import estacio.exercises.av1calc.R;
 import estacio.exercises.av1calc.domain.enums.TokenType;
 
 public class Token {
 
-    private String value;
+    private double value;
     private TokenType type;
     private int precedence;
 
     // For operators who do not use precedence
-    private Token(String value, TokenType type){
-        this.value = value;
+    protected Token(TokenType type){
         this.type = type;
     }
 
-    private Token(String value, TokenType type, int precedence) {
-        this(value, type);
+    // For Operator
+    protected Token(TokenType type, int precedence){
+        this.type = type;
         this.precedence = precedence;
     }
 
-    public static Token createToken(String value) throws IllegalArgumentException {
-        Token tok;
-
-        if(TextUtils.isDigitsOnly(value)) {
-            tok = new Token(value, TokenType.NUMBER);
-        } else if(value.equals("+")) {
-            tok = new Token(value, TokenType.OP_SUM, 1);
-        } else if(value.equals("-")) {
-            tok = new Token(value, TokenType.OP_SUB, 1);
-        } else if(value.equals("*")) {
-            tok = new Token(value, TokenType.OP_MULT, 2);
-        } else if(value.equals("/")) {
-            tok = new Token(value, TokenType.OP_DIV, 2);
-        } else if(value.equals("^")) {
-            tok = new Token(value, TokenType.OP_POW, 3);
-        } else if(value.equals("(")) {
-            tok = new Token(value, TokenType.OPEN_BRACKET);
-        } else if(value.equals(")")) {
-            tok = new Token(value, TokenType.END_BRACKET);
-        } else if(value.hashCode() == 0x221A) { // Square root
-            tok = new Token(value, TokenType.OP_SQRT, 3);
-        } else {
-            throw new IllegalArgumentException(String.format(App.getAppContext().getString(R.string.exception_invalid_token), value));
-        }
-        return tok;
+    // For Operand
+    protected Token(TokenType type, double value) {
+        this.type = type;
+        this.value = value;
     }
 
-    public String getValue() {
+    public double getValue() {
         return value;
     }
 
@@ -64,6 +41,34 @@ public class Token {
 
     @Override
     public String toString() {
-        return getValue();
+        String result = "";
+        switch (this.getType()) {
+            case NUMBER:
+                result = String.valueOf((int) this.value);
+                break;
+            case OP_SUM:
+                result = "+";
+                break;
+            case OP_SUB:
+                result = "-";
+                break;
+            case OP_MULT:
+                result = "*";
+                break;
+            case OP_DIV:
+                result = "/";
+                break;
+            case OP_POW:
+                result = "^";
+                break;
+            case OP_SQRT:
+                result = App.getAppContext().getString(R.string.square_root);
+                break;
+            case OPEN_BRACKET:
+                break;
+            case END_BRACKET:
+                break;
+        }
+        return result;
     }
 }
