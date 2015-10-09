@@ -50,6 +50,8 @@ public class CalculatorExpression {
         Stack<Token> stack = new Stack<>();
         Collection<Token> tokens = new LinkedList<>();
 
+        int openBracketCount = 0;
+
         for (Token item : this.expressionTokens) {
             switch (item.getType()) {
                 case NUMBER:
@@ -69,12 +71,17 @@ public class CalculatorExpression {
                     continue;
                 case OPEN_BRACKET:
                     stack.push(item);
+                    openBracketCount++;
                     continue;
                 case END_BRACKET:
+                    if(openBracketCount == 0)
+                        throw new IllegalArgumentException(App.getAppContext().getString(R.string.exception_expr_invalid));
+
                     while(!stack.empty() && stack.peek().getType() != TokenType.OPEN_BRACKET) {
                         tokens.add(stack.pop());
                     }
                     stack.pop(); // remove open bracket
+                    openBracketCount--;
             }
         }
 
@@ -86,7 +93,7 @@ public class CalculatorExpression {
         return tokens;
     }
 
-    private double calculateRPN() {
+    private double calculateRPN() throws IllegalArgumentException {
         Stack<Double> operands = new Stack<>();
 
         for (Token item : this.expressionTokensRPN) {
@@ -95,12 +102,17 @@ public class CalculatorExpression {
             } else {
                 double result = 0, value1, value2 = 0;
 
+                if(operands.isEmpty())
+                    throw new IllegalArgumentException(App.getAppContext().getString(R.string.exception_expr_invalid));
+
                 // square root only use one operand
                 if(item.getType() == TokenType.OP_SQRT) {
                     value1 = operands.pop();
-                } else {
+                } else if(operands.size() >= 2) {
                     value2 = operands.pop();
                     value1 = operands.pop();
+                } else {
+                    throw new IllegalArgumentException(App.getAppContext().getString(R.string.exception_expr_invalid));
                 }
 
                 switch (item.getType()) {
@@ -114,9 +126,9 @@ public class CalculatorExpression {
                         result = value1 * value2;
                         break;
                     case OP_DIV:
-                        if (value2 == 0) {
+                        if (value2 == 0)
                             throw new IllegalArgumentException(App.getAppContext().getString(R.string.exception_divisor_by_zero));
-                        }
+
                         result = value1 / value2;
                         break;
                     case OP_POW:
@@ -129,6 +141,10 @@ public class CalculatorExpression {
                 operands.push(result);
             }
         }
+
+        if (operands.isEmpty())
+            throw new IllegalArgumentException(App.getAppContext().getString(R.string.exception_divisor_by_zero));
+
         return operands.pop();
     }
 }
