@@ -19,9 +19,6 @@ public class CalculatorExpression {
     private Collection<Token> expressionTokensRPN;
 
     public CalculatorExpression(String expression) {
-        if(!validateExpression(expression))
-            throw new IllegalArgumentException(App.getAppContext().getString(R.string.exception_expr_invalid));
-
         this.expression = expression;
     }
 
@@ -39,10 +36,6 @@ public class CalculatorExpression {
             this.expressionRPN = Arrays.toString(expressionTokensRPN.toArray());
         }
         return this.expressionRPN;
-    }
-
-    private boolean validateExpression(String expression) {
-        return true;
     }
 
     // Algorithm that converts [algebraic expression] in [Reverse Polish notation] (RPN)
