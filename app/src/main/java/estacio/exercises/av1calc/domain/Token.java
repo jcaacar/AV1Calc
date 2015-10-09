@@ -65,8 +65,10 @@ public class Token {
                 result = App.getAppContext().getString(R.string.square_root);
                 break;
             case OPEN_BRACKET:
+                result = "(";
                 break;
             case END_BRACKET:
+                result = ")";
                 break;
         }
         return result;

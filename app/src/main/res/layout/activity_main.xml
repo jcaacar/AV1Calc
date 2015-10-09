@@ -10,7 +10,7 @@
     <TextView
         android:id="@+id/tvInput"
         android:layout_width="fill_parent"
-        android:layout_height="80dp"
+        android:layout_height="70dp"
         android:paddingRight="5dp"
         android:text="0"
         android:textSize="32sp"
@@ -38,7 +38,6 @@
         android:textColor="@android:color/holo_orange_dark"
         android:gravity="center_vertical|right" />
 
-
     <!-- Buttons  -->
     <TableLayout
         android:layout_width="fill_parent"
@@ -51,22 +50,28 @@
             <Button
                 style="@style/StyleButton"
                 android:text="^"
-                android:onClick="btnOnClick" />
+                android:onClick="btnOnClick"
+                android:layout_column="0" />
 
             <Button
                 style="@style/StyleButton"
                 android:text="@string/square_root"
-                android:onClick="btnOnClick" />
+                android:onClick="btnOnClick"
+                android:layout_column="1" />
 
             <Button
                 style="@style/StyleButton"
                 android:text="/"
-                android:onClick="btnOnClick" />
+                android:onClick="btnOnClick"
+                android:layout_column="2" />
 
             <Button
                 style="@style/StyleButton"
+                android:id="@+id/btnBack"
                 android:text="@string/backspace"
-                android:onClick="btnBackspaceOnClick" />
+                android:onClick="btnBackspaceOnClick"
+                android:longClickable="true"
+                />
 
         </TableRow>
 
@@ -146,11 +151,6 @@
 
             <Button
                 style="@style/StyleButton"
-                android:text="AC"
-                android:onClick="btnCleanOnClick"/>
-
-            <Button
-                style="@style/StyleButton"
                 android:text="("
                 android:onClick="btnOnClick" />
 
@@ -161,8 +161,13 @@
 
             <Button
                 style="@style/StyleButton"
+                android:text="0"
+                android:onClick="btnOnClick" />
+
+            <Button
+                style="@style/StyleButton"
                 android:text="="
-                android:onClick="btnEqualsOnClick"/>
+                android:onClick="btnEqualsOnClick" />
 
         </TableRow>
 

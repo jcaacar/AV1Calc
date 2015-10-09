@@ -16,6 +16,8 @@ import estacio.exercises.av1calc.domain.enums.TokenType;
 
 public final class TokenUtil {
 
+    static final int SQUARE_ROOT = 0x221A;
+
     public static Collection<Token> extractTokens(String expression) throws IllegalArgumentException {
         Collection<Token>  tokens = new LinkedList<>();
         BufferedReader buffer = new BufferedReader(new StringReader(expression));
@@ -46,7 +48,7 @@ public final class TokenUtil {
                     tok = new Token(TokenType.OP_DIV, 2);
                 } else if (c == '^') {
                     tok = new Token(TokenType.OP_POW, 3);
-                } else if (c == 0x221A) {                  // Square root
+                } else if (c == SQUARE_ROOT) {
                     tok = new Token(TokenType.OP_SQRT, 3);
                 } else if (c == '(') {
                     tok = new Token(TokenType.OPEN_BRACKET);
@@ -59,7 +61,7 @@ public final class TokenUtil {
             }
             buffer.close();
         } catch (IOException e) {
-            Log.e("Stream Close: ", e.getMessage());
+            Log.e("Stream Closed: ", e.getMessage());
         }
         return tokens;
     }
