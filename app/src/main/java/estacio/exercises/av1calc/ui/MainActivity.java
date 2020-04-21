@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Toast;
 import android.widget.Button;
 import android.widget.TextView;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 import estacio.exercises.av1calc.App;
 import estacio.exercises.av1calc.R;
